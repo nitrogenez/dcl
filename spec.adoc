@@ -1,0 +1,79 @@
+= Descriptive Config Language specification
+Andrij "nitrogenez" Glyko <nitrogenez.dev@tuta.io>
+v0.1, 2024-05-25
+
+:toc:
+
+== Types
+
+* Primitive
+** integer: `i8`, `i16`, `i32`, `i64`, `i128`, accepted characters: `0` to `9`
+** unsigned integer: `u8`, `u16`, `u32`, `u64`, `u128`, accepted characters: `0` to `9`
+** floating point: `f32`, `f64`, accepted characters: `0` to `9`, `.`
+* Complex
+** string: `str`, accepted characters: all
+** section: `section`, accepted characters: `a` to `z`, `A` to `Z`, `0` to `9`, `_`, exclude: `0` to `9` if X is first character
+
+== Tokens
+
+* `identifier`
+* `str_literal`
+* `num_literal`
+* `punctuator`
+
+=== Tokens:identifier
+
+The `identifier` token can be one of the following:
+
+* `var_name`
+* `section_name`
+* `type_notation`
+
+Rules:
+
+* Disallow use of numeric characters as first character of the `identifier`
+* Allow use of numeric characters as any other character of the `identifier`
+* Disallow use of special characters (charset: `@#$%^&(){}[]<>\/`)
+* Disallow use of punctuation characters (charset: `,.;:?!`)
+* Disallow use of math operation characters (charset: `-=+`)
+
+=== Tokens:str_literal
+
+The `str_literal` token represents a quoted string literal.
+
+Rules:
+
+* Disallow use of the quote character unless escaped
+* Allow use of singular quote character
+
+=== Tokens:num_literal
+
+The `num_literal` token represents a numeric literal, which is most likely a number.
+`num_literal` might be the following:
+
+* `float_literal`
+* `int_literal`
+
+Rules:
+
+* Allow use of all numeric characters (charset: `0123456789`)
+* Allow use of the underscore character (`_`), omitting it later
+
+==== Tokens:num_literal:formats
+
+The `num_literal` can be in one of the following representations:
+
+* `binary` (charset: `01`, prefix: `0b`, `0B`)
+* `hexadecimal` (charset: `0123456789ABCDEFabcdef`, prefix: `0x`, `0X`)
+* `octal` (charset: `01234567`, prefix: `0o`, `0O`)
+* `decimal` (charset: `0123456789`, prefix: none)
+
+`num_literal` must be parsed as `decimal` by default. The user may decide to use
+another representation, for that the user must prefix the `num_literal` with one of the 
+prefixes listed above.
+
+=== Tokens:punctuator
+
+The `punctuator` token corresponds to any punctuation character.
+Charset: `.,?!;:`
+
